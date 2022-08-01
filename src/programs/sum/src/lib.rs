@@ -29,7 +29,7 @@ fn process_instruction(
 
     // The account must be owned by the program in order to modify its data
     if account.owner != program_id {
-        msg!("Account does not have the correct program id");
+        msg!("Account does not have the correct program id!");
         return Err(ProgramError::IncorrectProgramId);
     }
 
