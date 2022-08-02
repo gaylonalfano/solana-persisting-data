@@ -48,7 +48,14 @@ fn process_instruction(
     // slice into a MathSquare struct. 
     let mut math_square = MathSquare::try_from_slice(&account.data.borrow())?;
     // Next, we can work with the data!
-    math_square.square = u32::pow(math_square.square, 2);
+    // Q: How do we set the default value of math_square.square = 2?
+    // Q: Would this be where instruction_data comes into play/???
+    // Q: Do I just use a simple if/else or match?
+    if math_square.square == 0 {
+        math_square.square = u32::pow(2, 2);
+    } else {
+        math_square.square = u32::pow(math_square.square, 2);
+    }
     // Finally, serialize it all back into Borsh type
     math_square.serialize(&mut &mut account.data.borrow_mut()[..])?;
 
