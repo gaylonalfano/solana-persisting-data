@@ -5,7 +5,8 @@ import * as math from "./math";
 // NOTE We need to replicate our Rust struct/schema
 // 1.1 Create a Class to mimic the struct
 class MathSquare {
-  // NOTE Giving default value of 2 so it can actually square the value
+  // NOTE Setting default value here DOES NOTHING! The only way I've
+  // set default is using if/else inside the actual program lib.rs!
   square = 2;
   constructor(fields: { square: number } | undefined = undefined) {
     if (fields) {
