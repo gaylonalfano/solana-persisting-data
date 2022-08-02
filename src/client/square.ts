@@ -5,7 +5,8 @@ import * as math from "./math";
 // NOTE We need to replicate our Rust struct/schema
 // 1.1 Create a Class to mimic the struct
 class MathSquare {
-  square = 1;
+  // NOTE Giving default value of 2 so it can actually square the value
+  square = 2;
   constructor(fields: { square: number } | undefined = undefined) {
     if (fields) {
       this.square = fields.square;
@@ -26,7 +27,7 @@ const MATH_SQUARE_SIZE = borsh.serialize(
 ).length;
 
 async function main() {
-  await math.runExample("sum", MATH_SQUARE_SIZE);
+  await math.runExample("square", MATH_SQUARE_SIZE);
 }
 
 main().then(

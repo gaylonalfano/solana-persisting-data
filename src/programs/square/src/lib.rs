@@ -36,7 +36,7 @@ fn process_instruction(
     msg!("Debug output:");
     msg!("Account ID: {}", account.key);
     msg!("Executable: {}", account.executable);
-    msg!("Lamports: {}", account.lamports);
+    msg!("Lamports: {:?}", account.lamports);
     msg!("Debug output complete.");
     
     // Program logic (e.g., do something with square)
@@ -48,7 +48,6 @@ fn process_instruction(
     // slice into a MathSquare struct. 
     let mut math_square = MathSquare::try_from_slice(&account.data.borrow())?;
     // Next, we can work with the data!
-    // math_square.square = math_square.square * math_square.square
     math_square.square = u32::pow(math_square.square, 2);
     // Finally, serialize it all back into Borsh type
     math_square.serialize(&mut &mut account.data.borrow_mut()[..])?;

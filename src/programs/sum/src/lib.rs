@@ -25,6 +25,7 @@ fn process_instruction(
     let accounts_iter = &mut accounts.iter();
 
     // Get the account to interact/transact with
+    // NOTE In this case, it's an account that stores data with a MathSum data structure
     let account = next_account_info(accounts_iter)?;
 
     // The account must be owned by the program in order to modify its data
@@ -36,7 +37,7 @@ fn process_instruction(
     msg!("Debug output:");
     msg!("Account ID: {}", account.key);
     msg!("Executable: {}", account.executable);
-    msg!("Lamports: {}", account.lamports);
+    msg!("Lamports: {:?}", account.lamports);
     msg!("Debug output complete.");
     
     // Program logic (e.g., do something with sum)

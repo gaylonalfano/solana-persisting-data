@@ -2,7 +2,8 @@ import * as borsh from "borsh";
 import * as math from "./math";
 
 // 1. Compute the account space size (bytes) based off our data struct (MathSum)
-// NOTE We need to replicate our Rust struct/schema
+// NOTE Our on-chain program is EXPECTING a schema that replicates/mimics
+// our data account's struct (e.g., MathSum, MathSquare, etc.)
 // 1.1 Create a Class to mimic the struct
 class MathSum {
   sum = 0;

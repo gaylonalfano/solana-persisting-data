@@ -1,6 +1,3 @@
-// TODO Keep finishing this one up and reviewing the accounts
-// NOTE I think it's best to think of the clientAccount
-// as a DATA ACCOUNT... at least that's where I'm leaning lol
 import {
   Keypair,
   Connection,
@@ -35,9 +32,11 @@ let programKeypair: Keypair;
 let programId: PublicKey;
 let clientPubKey: PublicKey;
 
-// TODO Confirm the correct path after building with cargo build
-// let PROGRAM_FILE_PATH = path.resolve(__dirname, "../../target");
-let PROGRAM_FILE_PATH = path.resolve(__dirname, "../programs/square/target");
+// let PROGRAM_FILE_PATH = path.resolve(__dirname, "../../dist/program");
+let PROGRAM_FILE_PATH = path.resolve(
+  __dirname,
+  "../programs" // <programName>/target/deploy is full path
+);
 
 /*
  * Connect to cluster
@@ -56,11 +55,11 @@ export async function getLocalAccount() {
   // NOTE localKeypair AKA wallet!
   localKeypair = await createKeypairFromFile(keypairPath);
   // NOTE Obviously can omit if not testing on devnet
-  const airdropRequest = await connection.requestAirdrop(
-    localKeypair.publicKey,
-    LAMPORTS_PER_SOL * 2
-  );
-  await connection.confirmTransaction(airdropRequest);
+  // const airdropRequest = await connection.requestAirdrop(
+  //   localKeypair.publicKey,
+  //   LAMPORTS_PER_SOL * 2
+  // );
+  // await connection.confirmTransaction(airdropRequest);
 
   console.log("Local account loaded successfully.");
   console.log("Local account's address is:");
@@ -71,8 +70,15 @@ export async function getLocalAccount() {
  * Get the targeted program we intend to transact with
  */
 export async function getProgram(programName: string) {
+  // NOTE PROGRAM_FILE_PATH points to 'programs' dir
+  // Still need to join to '/<programName>/target/deploy' dir
   programKeypair = await createKeypairFromFile(
-    path.join(PROGRAM_FILE_PATH, programName + "-keypair.json")
+    path.join(
+      PROGRAM_FILE_PATH,
+      programName,
+      "target/deploy",
+      programName + "-keypair.json"
+    )
   );
   programId = programKeypair.publicKey;
 
@@ -99,8 +105,18 @@ export async function getProgram(programName: string) {
 // that my WALLET (keypair) is the NFT owner, and I'm signing permission
 // via my wallet to allow the FFF staking program to interact with my
 // NFT token account. Do I have this right?
+// A: Okay, I'm quite off and still not fully clear. FoxyDev says the above
+// is 'delegation'. Also, I believe there is a difference between the
+// terms 'client' vs. 'client account'. The 'client' is a TS app that
+// Solana Web3 gives us. The 'client account' is maybe better known as
+// an account that our 'client' creates. You can have multiple 'client accounts'
+// (e.g., could be PDAs, standard data accounts, etc). In this repo,
+// we can change the SEED to create another unique data account. I'm trying
+// not to overthink it all haha.
 export async function configureClientAccount(accountSpaceSize: number) {
-  const SEED = "math";
+  // NOTE We can pass a new seed to generate ANOTHER new data account!
+  // It's really that easy! Each account will have its own data!
+  const SEED = "math1";
   // NOTE By passing programId into createWithSeed(), this makes the
   // programId the OWNER of this account that we create! Recall that this
   // is required in order for the program to transact and modify this
