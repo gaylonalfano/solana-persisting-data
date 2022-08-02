@@ -33,6 +33,28 @@ fn process_instruction(
         return Err(ProgramError::IncorrectProgramId);
     }
 
+    msg!("Debug output:");
+    msg!("Account ID: {}", account.key);
+    msg!("Executable: {}", account.executable);
+    msg!("Lamports: {}", account.lamports);
+    msg!("Debug output complete.");
+    
+    // Program logic (e.g., do something with sum)
+    msg!("Adding 1 to sum...");
+    
+    // NOTE The Borsh type comes with a prebuilt method try_from_slice.
+    // This gets a String slice representation of the bytes that make up
+    // our MathSum struct/schema. Meaning, it attempts to deserialize the
+    // slice into a MathSum struct. 
+    let mut math_sum = MathSum::try_from_slice(&account.data.borrow())?;
+    // Next, we can work with the data!
+    math_sum.sum += 1;
+    // Finally, serialize it all back into Borsh type
+    math_sum.serialize(&mut &mut account.data.borrow_mut()[..])?;
+
+    msg!("Current sum is now: {}", math_sum.sum);
+    
+
     Ok(())
 }
 
